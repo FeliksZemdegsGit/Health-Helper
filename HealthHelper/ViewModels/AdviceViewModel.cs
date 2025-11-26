@@ -20,7 +20,7 @@ public partial class AdviceViewModel : ViewModelBase
     public void Load(DailySnapshot snapshot, AdviceBundle bundle)
     {
         NarrativeSummary = bundle.Narrative;
-        Metadata = $"记录日期：{snapshot.Date:yyyy年M月d日} · 体重 {snapshot.BodyWeightKg:F0} kg";
+        Metadata = $"记录日期：{snapshot.Date:yyyy年M月d日}";
     }
 
     [RelayCommand]

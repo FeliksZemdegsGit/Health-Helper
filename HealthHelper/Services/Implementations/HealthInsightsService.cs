@@ -105,11 +105,15 @@ public sealed class HealthInsightsService : IHealthInsightsService, IDisposable
         using var connection = new SqliteConnection(_connectionString);
         connection.Open();
 
+        if (RequiresBodyWeightMigration(connection))
+        {
+            MigrateAwayFromBodyWeight(connection);
+        }
+
         using var command = connection.CreateCommand();
         command.CommandText = """
             CREATE TABLE IF NOT EXISTS daily_logs (
                 log_date TEXT PRIMARY KEY,
-                body_weight REAL NOT NULL,
                 bed_time TEXT,
                 wake_time TEXT,
                 sleep_quality INTEGER,
@@ -131,7 +135,6 @@ public sealed class HealthInsightsService : IHealthInsightsService, IDisposable
         command.CommandText = """
             INSERT INTO daily_logs (
                 log_date,
-                body_weight,
                 bed_time,
                 wake_time,
                 sleep_quality,
@@ -141,7 +144,6 @@ public sealed class HealthInsightsService : IHealthInsightsService, IDisposable
                 sedentary_minutes)
             VALUES (
                 $date,
-                $weight,
                 $bed,
                 $wake,
                 $sleepQuality,
@@ -150,18 +152,16 @@ public sealed class HealthInsightsService : IHealthInsightsService, IDisposable
                 $workoutMinutes,
                 $sedentaryMinutes)
             ON CONFLICT(log_date) DO UPDATE SET
-                body_weight = excluded.body_weight,
-              bed_time = excluded.bed_time,
-              wake_time = excluded.wake_time,
-              sleep_quality = excluded.sleep_quality,
-              hydration_target = excluded.hydration_target,
-              hydration_consumed = excluded.hydration_consumed,
-              workout_minutes = excluded.workout_minutes,
-              sedentary_minutes = excluded.sedentary_minutes;
+                bed_time = excluded.bed_time,
+                wake_time = excluded.wake_time,
+                sleep_quality = excluded.sleep_quality,
+                hydration_target = excluded.hydration_target,
+                hydration_consumed = excluded.hydration_consumed,
+                workout_minutes = excluded.workout_minutes,
+                sedentary_minutes = excluded.sedentary_minutes;
             """;
 
         command.Parameters.AddWithValue("$date", snapshot.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
-        command.Parameters.AddWithValue("$weight", snapshot.BodyWeightKg);
         command.Parameters.AddWithValue("$bed", snapshot.Sleep?.BedTime.ToString("O"));
         command.Parameters.AddWithValue("$wake", snapshot.Sleep?.WakeTime.ToString("O"));
         command.Parameters.AddWithValue("$sleepQuality", snapshot.Sleep?.QualityScore);
@@ -192,7 +192,6 @@ public sealed class HealthInsightsService : IHealthInsightsService, IDisposable
         await using var command = connection.CreateCommand();
         command.CommandText = $"""
             SELECT log_date,
-                   body_weight,
                    bed_time,
                    wake_time,
                    sleep_quality,
@@ -218,34 +217,116 @@ public sealed class HealthInsightsService : IHealthInsightsService, IDisposable
     private static DailySnapshot ReadSnapshot(SqliteDataReader reader)
     {
         var date = DateOnly.Parse(reader.GetString(0), CultureInfo.InvariantCulture);
-        var bodyWeight = reader.GetDouble(1);
 
         SleepLog? sleep = null;
-        if (!reader.IsDBNull(2) && !reader.IsDBNull(3) && !reader.IsDBNull(4))
+        if (!reader.IsDBNull(1) && !reader.IsDBNull(2) && !reader.IsDBNull(3))
         {
-            var bed = DateTimeOffset.Parse(reader.GetString(2), CultureInfo.InvariantCulture);
-            var wake = DateTimeOffset.Parse(reader.GetString(3), CultureInfo.InvariantCulture);
-            var quality = reader.GetInt32(4);
+            var bed = DateTimeOffset.Parse(reader.GetString(1), CultureInfo.InvariantCulture);
+            var wake = DateTimeOffset.Parse(reader.GetString(2), CultureInfo.InvariantCulture);
+            var quality = reader.GetInt32(3);
             sleep = new SleepLog(bed, wake, quality);
         }
 
         HydrationLog? hydration = null;
-        if (!reader.IsDBNull(5) && !reader.IsDBNull(6))
+        if (!reader.IsDBNull(4) && !reader.IsDBNull(5))
         {
-            var target = reader.GetDouble(5);
-            var consumed = reader.GetDouble(6);
-            hydration = new HydrationLog(target, consumed, bodyWeight);
+            var target = reader.GetDouble(4);
+            var consumed = reader.GetDouble(5);
+            hydration = new HydrationLog(target, consumed);
         }
 
         ActivityLog? activity = null;
-        if (!reader.IsDBNull(7) && !reader.IsDBNull(8))
+        if (!reader.IsDBNull(6) && !reader.IsDBNull(7))
         {
-            var workout = reader.GetInt32(7);
-            var sedentary = reader.GetInt32(8);
+            var workout = reader.GetInt32(6);
+            var sedentary = reader.GetInt32(7);
             activity = new ActivityLog(workout, sedentary);
         }
 
-        return new DailySnapshot(date, bodyWeight, sleep, hydration, activity);
+        return new DailySnapshot(date, sleep, hydration, activity);
+    }
+
+    private static bool RequiresBodyWeightMigration(SqliteConnection connection)
+    {
+        using var checkCommand = connection.CreateCommand();
+        checkCommand.CommandText = "PRAGMA table_info(daily_logs);";
+        using var reader = checkCommand.ExecuteReader();
+        while (reader.Read())
+        {
+            var columnName = reader.GetString(1);
+            if (string.Equals(columnName, "body_weight", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static void MigrateAwayFromBodyWeight(SqliteConnection connection)
+    {
+        using var transaction = connection.BeginTransaction();
+
+        using (var rename = connection.CreateCommand())
+        {
+            rename.Transaction = transaction;
+            rename.CommandText = "ALTER TABLE daily_logs RENAME TO daily_logs_legacy;";
+            rename.ExecuteNonQuery();
+        }
+
+        using (var create = connection.CreateCommand())
+        {
+            create.Transaction = transaction;
+            create.CommandText = """
+                CREATE TABLE daily_logs (
+                    log_date TEXT PRIMARY KEY,
+                    bed_time TEXT,
+                    wake_time TEXT,
+                    sleep_quality INTEGER,
+                    hydration_target REAL,
+                    hydration_consumed REAL,
+                    workout_minutes INTEGER,
+                    sedentary_minutes INTEGER
+                );
+                """;
+            create.ExecuteNonQuery();
+        }
+
+        using (var copy = connection.CreateCommand())
+        {
+            copy.Transaction = transaction;
+            copy.CommandText = """
+                INSERT INTO daily_logs (
+                    log_date,
+                    bed_time,
+                    wake_time,
+                    sleep_quality,
+                    hydration_target,
+                    hydration_consumed,
+                    workout_minutes,
+                    sedentary_minutes)
+                SELECT
+                    log_date,
+                    bed_time,
+                    wake_time,
+                    sleep_quality,
+                    hydration_target,
+                    hydration_consumed,
+                    workout_minutes,
+                    sedentary_minutes
+                FROM daily_logs_legacy;
+                """;
+            copy.ExecuteNonQuery();
+        }
+
+        using (var drop = connection.CreateCommand())
+        {
+            drop.Transaction = transaction;
+            drop.CommandText = "DROP TABLE daily_logs_legacy;";
+            drop.ExecuteNonQuery();
+        }
+
+        transaction.Commit();
     }
 
     public void Dispose()

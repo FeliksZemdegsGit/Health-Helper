@@ -35,16 +35,12 @@
                     <StackPanel Spacing="8">
                         <TextBlock Text="饮水记录" FontWeight="SemiBold"/>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="目标 (ml)" Width="110"/>
-                            <TextBox Width="120" Text="{Binding HydrationGoalInput}" />
+                            <TextBlock Text="每日目标" Width="110"/>
+                            <TextBlock Text="{Binding HydrationTargetDisplay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="已饮 (ml)" Width="110"/>
                             <TextBox Width="120" Text="{Binding HydrationConsumedInput}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="体重 (kg)" Width="110"/>
-                            <TextBox Width="120" Text="{Binding WeightInput}" />
                         </StackPanel>
                         <Button Content="记录饮水" Command="{Binding RecordHydrationCommand}" />
                         <TextBlock Text="{Binding HydrationStatusMessage}" Foreground="Gray"/>

@@ -70,7 +70,6 @@ public sealed class LargeLanguageModelClient : IRecommendationClient, IDisposabl
     private static object MapSnapshot(DailySnapshot snapshot) => new
     {
         snapshot.Date,
-        snapshot.BodyWeightKg,
         SleepHours = snapshot.Sleep?.Duration.TotalHours,
         snapshot.Sleep?.QualityScore,
         snapshot.Hydration?.TargetMl,

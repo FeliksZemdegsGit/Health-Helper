@@ -22,12 +22,14 @@ public partial class InputViewModel : ViewModelBase
     [ObservableProperty] private string _bedTimeInput = string.Empty;
     [ObservableProperty] private string _wakeTimeInput = string.Empty;
     [ObservableProperty] private string _sleepQualityInput = string.Empty;
-    [ObservableProperty] private string _hydrationGoalInput = string.Empty;
     [ObservableProperty] private string _hydrationConsumedInput = string.Empty;
-    [ObservableProperty] private string _weightInput = string.Empty;
     [ObservableProperty] private string _workoutMinutesInput = string.Empty;
     [ObservableProperty] private string _sedentaryMinutesInput = string.Empty;
     [ObservableProperty] private string _statusMessage = "请录入今日健康数据";
+    private const double HydrationTargetMl = 2000;
+
+    public string HydrationTargetDisplay => $"{HydrationTargetMl:F0} ml";
+
     [ObservableProperty] private string _sleepStatusMessage = "尚未记录睡眠";
     [ObservableProperty] private string _hydrationStatusMessage = "尚未记录饮水";
     [ObservableProperty] private string _activityStatusMessage = "尚未记录运动";
@@ -67,26 +69,14 @@ public partial class InputViewModel : ViewModelBase
     [RelayCommand]
     private void RecordHydration()
     {
-        if (!TryParseDouble(HydrationGoalInput, out var goal) || goal <= 0)
-        {
-            StatusMessage = "饮水目标请输入正数 (ml)";
-            return;
-        }
-
         if (!TryParseDouble(HydrationConsumedInput, out var consumed) || consumed < 0)
         {
             StatusMessage = "已饮水量请输入非负数字 (ml)";
             return;
         }
 
-        if (!TryParseDouble(WeightInput, out var weight) || weight <= 0)
-        {
-            StatusMessage = "体重请输入正数 (kg)";
-            return;
-        }
-
-        _hydrationLog = new HydrationLog(goal, consumed, weight);
-        HydrationStatusMessage = $"目标 {goal:F0} ml / 已饮 {consumed:F0} ml";
+        _hydrationLog = new HydrationLog(HydrationTargetMl, consumed);
+        HydrationStatusMessage = $"目标 {HydrationTargetMl:F0} ml / 已饮 {consumed:F0} ml";
         StatusMessage = "饮水记录已更新";
     }
 
@@ -121,7 +111,6 @@ public partial class InputViewModel : ViewModelBase
 
         var snapshot = new DailySnapshot(
             DateOnly.FromDateTime(DateTime.Today),
-            _hydrationLog.BodyWeightKg,
             _sleepLog,
             _hydrationLog,
             _activityLog);
