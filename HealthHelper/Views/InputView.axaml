@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:HealthHelper.ViewModels"
+             x:Class="HealthHelper.Views.InputView"
+             x:DataType="vm:InputViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="18">
+            <TextBlock Text="今日健康数据录入" FontSize="28" FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding StatusMessage}" Foreground="Gray" TextWrapping="Wrap"/>
+            <TextBlock x:Name="StorageStatusBlock" Foreground="#777" FontSize="12"/>
+
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="16" RowSpacing="16">
+                <Border Grid.Row="0" Grid.Column="0" Padding="12" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="6">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="睡眠记录" FontWeight="SemiBold"/>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="入睡 (HH:mm)" Width="110"/>
+                            <TextBox Width="120" Text="{Binding BedTimeInput}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="起床 (HH:mm)" Width="110"/>
+                            <TextBox Width="120" Text="{Binding WakeTimeInput}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="质量 (1-10)" Width="110"/>
+                            <TextBox Width="120" Text="{Binding SleepQualityInput}" />
+                        </StackPanel>
+                        <Button Content="记录睡眠" Command="{Binding RecordSleepCommand}" />
+                        <TextBlock Text="{Binding SleepStatusMessage}" Foreground="Gray"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="0" Grid.Column="1" Padding="12" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="6">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="饮水记录" FontWeight="SemiBold"/>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="目标 (ml)" Width="110"/>
+                            <TextBox Width="120" Text="{Binding HydrationGoalInput}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="已饮 (ml)" Width="110"/>
+                            <TextBox Width="120" Text="{Binding HydrationConsumedInput}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="体重 (kg)" Width="110"/>
+                            <TextBox Width="120" Text="{Binding WeightInput}" />
+                        </StackPanel>
+                        <Button Content="记录饮水" Command="{Binding RecordHydrationCommand}" />
+                        <TextBlock Text="{Binding HydrationStatusMessage}" Foreground="Gray"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="1" Grid.ColumnSpan="2" Padding="12" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="6">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="运动记录" FontWeight="SemiBold"/>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="运动 (分钟)" Width="110"/>
+                            <TextBox Width="120" Text="{Binding WorkoutMinutesInput}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="久坐 (分钟)" Width="110"/>
+                            <TextBox Width="120" Text="{Binding SedentaryMinutesInput}" />
+                        </StackPanel>
+                        <Button Content="记录运动" Command="{Binding RecordActivityCommand}" />
+                        <TextBlock Text="{Binding ActivityStatusMessage}" Foreground="Gray"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Content="生成健康建议"
+                        Command="{Binding GenerateAdviceCommand}"
+                        IsEnabled="{Binding CanGenerateAdvice}"/>
+                <ProgressBar Width="150" IsIndeterminate="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
+
+

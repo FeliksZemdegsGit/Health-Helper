@@ -3,6 +3,8 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="HealthHelper/Views/AdviceView.axaml" value="HealthHelper/HealthHelper.csproj" />
+        <entry key="HealthHelper/Views/InputView.axaml" value="HealthHelper/HealthHelper.csproj" />
         <entry key="HealthHelper/Views/MainWindow.axaml" value="HealthHelper/HealthHelper.csproj" />
       </map>
     </option>

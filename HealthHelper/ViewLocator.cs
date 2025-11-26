@@ -2,6 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using HealthHelper.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HealthHelper;
 
@@ -17,6 +18,11 @@ public class ViewLocator : IDataTemplate
 
         if (type != null)
         {
+            if (App.Services.GetService(type) is Control resolved)
+            {
+                return resolved;
+            }
+
             return (Control)Activator.CreateInstance(type)!;
         }
 
