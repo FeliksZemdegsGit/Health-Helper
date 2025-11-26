@@ -33,8 +33,8 @@ public partial class InputView : UserControl
         {
             var days = await _healthInsightsService.GetStoredDayCountAsync().ConfigureAwait(true);
             block.Text = days > 0
-                ? $"SQLite 已存 {days} 天历史数据"
-                : "SQLite 尚无历史数据";
+                ? $"已存 {days} 天历史数据"
+                : "尚无历史数据";
         }
         catch (Exception ex)
         {
