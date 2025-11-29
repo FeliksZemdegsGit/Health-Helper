@@ -14,6 +14,8 @@ public partial class InputViewModel : ViewModelBase
     private readonly IHealthInsightsService _healthInsightsService;
     private readonly INavigationService _navigationService;
     private readonly Func<AdviceViewModel> _adviceViewModelFactory;
+    private readonly Func<HistoryViewModel> _historyViewModelFactory;
+    private readonly Func<WelcomeViewModel> _welcomeViewModelFactory;
 
     private SleepLog? _sleepLog;
     private HydrationLog? _hydrationLog;
@@ -33,17 +35,21 @@ public partial class InputViewModel : ViewModelBase
     [ObservableProperty] private string _sleepStatusMessage = "尚未记录睡眠";
     [ObservableProperty] private string _hydrationStatusMessage = "尚未记录饮水";
     [ObservableProperty] private string _activityStatusMessage = "尚未记录运动";
-    [ObservableProperty] private bool _isBusy;
+    [ObservableProperty] private bool _isBusy = false;
     [ObservableProperty] private bool _canGenerateAdvice = true;
 
     public InputViewModel(
         IHealthInsightsService healthInsightsService,
         INavigationService navigationService,
-        Func<AdviceViewModel> adviceViewModelFactory)
+        Func<AdviceViewModel> adviceViewModelFactory,
+        Func<HistoryViewModel> historyViewModelFactory,
+        Func<WelcomeViewModel> welcomeViewModelFactory)
     {
         _healthInsightsService = healthInsightsService;
         _navigationService = navigationService;
         _adviceViewModelFactory = adviceViewModelFactory;
+        _historyViewModelFactory = historyViewModelFactory;
+        _welcomeViewModelFactory = welcomeViewModelFactory;
     }
 
     [RelayCommand]
@@ -76,7 +82,8 @@ public partial class InputViewModel : ViewModelBase
         }
 
         _hydrationLog = new HydrationLog(HydrationTargetMl, consumed);
-        HydrationStatusMessage = $"目标 {HydrationTargetMl:F0} ml / 已饮 {consumed:F0} ml";
+        var goalStatus = consumed >= HydrationTargetMl ? "✅ 已达标" : "❌ 未达标";
+        HydrationStatusMessage = $"目标 {HydrationTargetMl:F0} ml / 已饮 {consumed:F0} ml {goalStatus}";
         StatusMessage = "饮水记录已更新";
     }
 
@@ -121,8 +128,12 @@ public partial class InputViewModel : ViewModelBase
 
             var bundle = await _healthInsightsService.GenerateCombinedAdviceAsync(snapshot);
 
+            // 将AI建议添加到snapshot中，并保存到数据库
+            var snapshotWithAdvice = snapshot with { Advice = bundle };
+            await _healthInsightsService.SaveSnapshotAsync(snapshotWithAdvice);
+
             var adviceViewModel = _adviceViewModelFactory();
-            adviceViewModel.Load(snapshot, bundle);
+            adviceViewModel.Load(snapshotWithAdvice, bundle);
 
             _navigationService.Navigate(adviceViewModel);
         }
@@ -134,6 +145,20 @@ public partial class InputViewModel : ViewModelBase
         {
             IsBusy = false;
         }
+    }
+
+    [RelayCommand]
+    private void ViewHistory()
+    {
+        var historyViewModel = _historyViewModelFactory();
+        _navigationService.Navigate(historyViewModel);
+    }
+
+    [RelayCommand]
+    private void GoBack()
+    {
+        var welcomeViewModel = _welcomeViewModelFactory();
+        _navigationService.Navigate(welcomeViewModel, addToBackStack: false);
     }
 
     private static bool TryParseTimePair(string bedInput, string wakeInput, out DateTimeOffset bedTime, out DateTimeOffset wakeTime)

@@ -11,23 +11,6 @@
   
     <Application.Styles>
         <FluentTheme />
-        <Style Selector="Button">
-            <Setter Property="Background" Value="#0078D4"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#0078D4"/>
-        </Style>
-        <Style Selector="Button:pointerover">
-            <Setter Property="Background" Value="#106EBE"/>
-            <Setter Property="BorderBrush" Value="#106EBE"/>
-        </Style>
-        <Style Selector="Button:pressed">
-            <Setter Property="Background" Value="#005A9E"/>
-            <Setter Property="BorderBrush" Value="#005A9E"/>
-        </Style>
-        <Style Selector="Button:disabled">
-            <Setter Property="Background" Value="#CCCCCC"/>
-            <Setter Property="Foreground" Value="#666666"/>
-            <Setter Property="BorderBrush" Value="#CCCCCC"/>
-        </Style>
+        <!-- 移除全局Button样式，让每个页面自行控制 -->
     </Application.Styles>
 </Application>

@@ -4,70 +4,130 @@
              x:Class="HealthHelper.Views.InputView"
              x:DataType="vm:InputViewModel">
 
-    <ScrollViewer>
+    <UserControl.Styles>
+        <!-- 基础按钮样式 -->
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button:pointerover">
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+
+        <Style Selector="Button.record-button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.record-button:pointerover">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.back-home">
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.back-home:pointerover">
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.generate-advice">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.generate-advice:pointerover">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.view-history">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.view-history:pointerover">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer Background="#F5F5F5">
         <StackPanel Margin="24" Spacing="18">
-            <TextBlock Text="今日健康数据录入" FontSize="28" FontWeight="SemiBold"/>
-            <TextBlock Text="{Binding StatusMessage}" Foreground="Gray" TextWrapping="Wrap"/>
-            <TextBlock x:Name="StorageStatusBlock" Foreground="#777" FontSize="12"/>
+            <TextBlock Text="今日健康数据录入" FontSize="28" FontWeight="SemiBold" Foreground="#2E7D32"/>
+            <TextBlock Text="{Binding StatusMessage}" Foreground="#666666" TextWrapping="Wrap"/>
+            <TextBlock x:Name="StorageStatusBlock" Foreground="#999999" FontSize="12"/>
 
             <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="16" RowSpacing="16">
                 <Border Grid.Row="0" Grid.Column="0" Padding="12" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="6">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="睡眠记录" FontWeight="SemiBold"/>
+                        <TextBlock Text="睡眠记录" FontWeight="SemiBold" Foreground="#2E7D32"/>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="入睡 (HH:mm)" Width="110"/>
+                            <TextBlock Text="入睡 (HH:mm)" Width="110" Foreground="#333333"/>
                             <TextBox Width="120" Text="{Binding BedTimeInput}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="起床 (HH:mm)" Width="110"/>
+                            <TextBlock Text="起床 (HH:mm)" Width="110" Foreground="#333333"/>
                             <TextBox Width="120" Text="{Binding WakeTimeInput}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="质量 (1-10)" Width="110"/>
+                            <TextBlock Text="质量 (1-10)" Width="110" Foreground="#333333"/>
                             <TextBox Width="120" Text="{Binding SleepQualityInput}" />
                         </StackPanel>
-                        <Button Content="记录睡眠" Command="{Binding RecordSleepCommand}" />
-                        <TextBlock Text="{Binding SleepStatusMessage}" Foreground="Gray"/>
+                        <Button Classes="record-button" Content="记录睡眠" Command="{Binding RecordSleepCommand}"/>
+                        <TextBlock Text="{Binding SleepStatusMessage}" Foreground="#666666"/>
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Row="0" Grid.Column="1" Padding="12" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="6">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="饮水记录" FontWeight="SemiBold"/>
+                        <TextBlock Text="饮水记录" FontWeight="SemiBold" Foreground="#2E7D32"/>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="每日目标" Width="110"/>
-                            <TextBlock Text="{Binding HydrationTargetDisplay}" />
+                            <TextBlock Text="每日目标" Width="110" Foreground="#333333"/>
+                            <TextBlock Text="{Binding HydrationTargetDisplay}" Foreground="#666666"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="已饮 (ml)" Width="110"/>
+                            <TextBlock Text="已饮 (ml)" Width="110" Foreground="#333333"/>
                             <TextBox Width="120" Text="{Binding HydrationConsumedInput}" />
                         </StackPanel>
-                        <Button Content="记录饮水" Command="{Binding RecordHydrationCommand}" />
-                        <TextBlock Text="{Binding HydrationStatusMessage}" Foreground="Gray"/>
+                        <Button Classes="record-button" Content="记录饮水" Command="{Binding RecordHydrationCommand}"/>
+                        <TextBlock Text="{Binding HydrationStatusMessage}" Foreground="#666666"/>
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Row="1" Grid.ColumnSpan="2" Padding="12" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="6">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="运动记录" FontWeight="SemiBold"/>
+                        <TextBlock Text="运动记录" FontWeight="SemiBold" Foreground="#2E7D32"/>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="运动 (分钟)" Width="110"/>
+                            <TextBlock Text="运动 (分钟)" Width="110" Foreground="#333333"/>
                             <TextBox Width="120" Text="{Binding WorkoutMinutesInput}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="久坐 (分钟)" Width="110"/>
+                            <TextBlock Text="久坐 (分钟)" Width="110" Foreground="#333333"/>
                             <TextBox Width="120" Text="{Binding SedentaryMinutesInput}" />
                         </StackPanel>
-                        <Button Content="记录运动" Command="{Binding RecordActivityCommand}" />
-                        <TextBlock Text="{Binding ActivityStatusMessage}" Foreground="Gray"/>
+                        <Button Classes="record-button" Content="记录运动" Command="{Binding RecordActivityCommand}"/>
+                        <TextBlock Text="{Binding ActivityStatusMessage}" Foreground="#666666"/>
                     </StackPanel>
                 </Border>
             </Grid>
 
             <StackPanel Orientation="Horizontal" Spacing="12">
-                <Button Content="生成健康建议"
+                <Button Classes="back-home" Content="⬅️ 返回首页"
+                        Command="{Binding GoBackCommand}"/>
+                <Button Classes="generate-advice" Content="生成健康建议"
                         Command="{Binding GenerateAdviceCommand}"
                         IsEnabled="{Binding CanGenerateAdvice}"/>
+                <Button Classes="view-history" Content="📋 查看历史记录"
+                        Command="{Binding ViewHistoryCommand}"/>
                 <ProgressBar Width="150" IsIndeterminate="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
             </StackPanel>
         </StackPanel>

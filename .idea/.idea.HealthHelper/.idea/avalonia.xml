@@ -5,8 +5,13 @@
       <map>
         <entry key="HealthHelper/App.axaml" value="HealthHelper/HealthHelper.csproj" />
         <entry key="HealthHelper/Views/AdviceView.axaml" value="HealthHelper/HealthHelper.csproj" />
+        <entry key="HealthHelper/Views/HealthTipsView.axaml" value="HealthHelper/HealthHelper.csproj" />
+        <entry key="HealthHelper/Views/HistoryDetailView.axaml" value="HealthHelper/HealthHelper.csproj" />
+        <entry key="HealthHelper/Views/HistoryView.axaml" value="HealthHelper/HealthHelper.csproj" />
         <entry key="HealthHelper/Views/InputView.axaml" value="HealthHelper/HealthHelper.csproj" />
         <entry key="HealthHelper/Views/MainWindow.axaml" value="HealthHelper/HealthHelper.csproj" />
+        <entry key="HealthHelper/Views/TipsView.axaml" value="HealthHelper/HealthHelper.csproj" />
+        <entry key="HealthHelper/Views/WelcomeView.axaml" value="HealthHelper/HealthHelper.csproj" />
       </map>
     </option>
   </component>

@@ -1,0 +1,170 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:HealthHelper.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="HealthHelper.Views.HealthTipsView"
+             x:Name="HealthTipsViewRoot"
+             x:DataType="vm:HealthTipsViewModel">
+
+    <UserControl.Styles>
+        <!-- 基础按钮样式 -->
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button:pointerover">
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+
+        <Style Selector="Button.favorite-button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#E91E63"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.favorite-button:pointerover">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#E91E63"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Background="#F5F5F5">
+        <!-- 顶部标题栏 -->
+        <Border Background="#2E7D32"
+                Height="60"
+                VerticalAlignment="Top">
+            <Grid Margin="24,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Content="← 返回"
+                       Background="Transparent"
+                       Foreground="White"
+                       BorderThickness="0"
+                       FontSize="14"
+                       Command="{Binding GoBackCommand}"
+                       Grid.Column="0"
+                       VerticalAlignment="Center"/>
+
+                <TextBlock Text="健康小贴士"
+                          FontSize="20"
+                          FontWeight="SemiBold"
+                          Foreground="White"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Grid.Column="1"/>
+            </Grid>
+        </Border>
+
+        <!-- 主要内容区域 -->
+        <ScrollViewer Margin="0,60,0,0" Background="#F5F5F5">
+            <StackPanel Margin="24" Spacing="20">
+
+                <!-- 筛选按钮 -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
+                    <Button Content="全部"
+                           Background="{Binding AllButtonBackground}"
+                           Foreground="{Binding AllButtonForeground}"
+                           Command="{Binding FilterTipsCommand}"
+                           CommandParameter="全部"/>
+                    <Button Content="收藏"
+                           Background="{Binding FavoriteButtonBackground}"
+                           Foreground="{Binding FavoriteButtonForeground}"
+                           Command="{Binding FilterTipsCommand}"
+                           CommandParameter="收藏"/>
+                </StackPanel>
+
+                <!-- 加载状态 -->
+                <TextBlock Text="正在加载小贴士..."
+                          HorizontalAlignment="Center"
+                          FontSize="16"
+                          Foreground="#666666"
+                          IsVisible="{Binding IsLoading}"/>
+
+                <!-- 小贴士列表 -->
+                <ItemsControl ItemsSource="{Binding Tips}"
+                             IsVisible="{Binding !IsLoading}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,16"
+                                   Padding="20"
+                                   BorderBrush="#E0E0E0"
+                                   BorderThickness="1"
+                                   CornerRadius="8"
+                                   Background="#FFFFFF">
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <!-- 标题 -->
+                                    <TextBlock Text="{Binding Tip.Title}"
+                                              FontSize="16"
+                                              FontWeight="SemiBold"
+                                              Foreground="#2E7D32"
+                                              Grid.Row="0"
+                                              Margin="0,0,0,8"/>
+
+                                    <!-- 内容 -->
+                                    <TextBlock Text="{Binding Tip.Content}"
+                                              FontSize="14"
+                                              TextWrapping="Wrap"
+                                              LineHeight="22"
+                                              Foreground="#333333"
+                                              Grid.Row="1"
+                                              Margin="0,0,0,12"/>
+
+                                    <!-- 底部操作栏 -->
+                                    <Grid Grid.Row="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- 分类标签 -->
+                                        <Border Background="#E8F5E8"
+                                               CornerRadius="12"
+                                               Padding="8,4"
+                                               HorizontalAlignment="Left">
+                                            <TextBlock Text="{Binding Tip.Category}"
+                                                      FontSize="12"
+                                                      Foreground="#2E7D32"/>
+                                        </Border>
+
+                                        <!-- 收藏按钮 -->
+                                        <Button Classes="favorite-button"
+                                               Content="{Binding FavoriteText}"
+                                               FontSize="14"
+                                               x:Name="FavoriteButton"
+                                               Click="FavoriteButton_OnClick"
+                                               Tag="{Binding}"
+                                               Grid.Column="1"
+                                               VerticalAlignment="Center"/>
+
+                                    </Grid>
+                                </Grid>
+
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+
+</UserControl>

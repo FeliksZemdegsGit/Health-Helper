@@ -16,6 +16,7 @@
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.3.4"/>
         <PackageReference Include="Avalonia.Desktop" Version="11.3.4"/>
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.4" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.4"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.4"/>
         <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.10" />
@@ -27,5 +28,6 @@
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
+        <PackageReference Include="ReactiveUI" Version="22.2.1" />
     </ItemGroup>
 </Project>

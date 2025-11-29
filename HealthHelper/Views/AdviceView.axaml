@@ -4,19 +4,59 @@
              x:Class="HealthHelper.Views.AdviceView"
              x:DataType="vm:AdviceViewModel">
 
-    <ScrollViewer>
+    <UserControl.Styles>
+        <!-- 基础按钮样式 -->
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button:pointerover">
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+
+        <Style Selector="Button.back-button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.back-button:pointerover">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.collapse-button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.collapse-button:pointerover">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer Background="#F5F5F5">
         <StackPanel Margin="24" Spacing="18">
             <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
                 <StackPanel Grid.Column="0">
-                    <TextBlock Text="智能建议" FontSize="28" FontWeight="SemiBold"/>
-                    <TextBlock Text="{Binding Metadata}" Foreground="Gray"/>
+                    <TextBlock Text="智能建议" FontSize="28" FontWeight="SemiBold" Foreground="#2E7D32"/>
+                    <TextBlock Text="{Binding Metadata}" Foreground="#666666"/>
                 </StackPanel>
-                <Button Grid.Column="1" Content="返回录入" Command="{Binding GoBackCommand}" HorizontalAlignment="Right"/>
+                <Button Classes="back-button"
+                       Grid.Column="1"
+                       Content="返回录入"
+                       Command="{Binding GoBackCommand}"
+                       HorizontalAlignment="Right"/>
             </Grid>
 
-            <Border Padding="12" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="6">
+            <Border Padding="20" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Background="White">
                 <StackPanel Spacing="8">
-                    <TextBlock Text="{Binding NarrativeSummary}" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding NarrativeSummary}" TextWrapping="Wrap" Foreground="#333333" FontSize="14" LineHeight="22"/>
                 </StackPanel>
             </Border>
         </StackPanel>

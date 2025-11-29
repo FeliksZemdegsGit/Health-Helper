@@ -11,12 +11,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public bool CanGoBack => _navigationService.CanGoBack;
 
-    public MainWindowViewModel(INavigationService navigationService, InputViewModel inputViewModel)
+    public MainWindowViewModel(INavigationService navigationService, WelcomeViewModel welcomeViewModel)
     {
         _navigationService = navigationService;
         _navigationService.CurrentViewModelChanged += HandleNavigationChanged;
 
-        _navigationService.Navigate(inputViewModel, addToBackStack: false);
+        _navigationService.Navigate(welcomeViewModel, addToBackStack: false);
         OnPropertyChanged(nameof(CurrentViewModel));
         OnPropertyChanged(nameof(CanGoBack));
     }

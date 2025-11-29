@@ -59,13 +59,48 @@ public partial class App : Application
         services.AddSingleton<IHealthInsightsService, HealthInsightsService>();
         services.AddSingleton<INavigationService, NavigationService>();
 
-        services.AddTransient<InputViewModel>();
+        services.AddTransient(sp =>
+        {
+            var healthInsightsService = sp.GetRequiredService<IHealthInsightsService>();
+            var navigationService = sp.GetRequiredService<INavigationService>();
+            var adviceViewModelFactory = sp.GetRequiredService<Func<AdviceViewModel>>();
+            var historyViewModelFactory = sp.GetRequiredService<Func<HistoryViewModel>>();
+            var welcomeViewModelFactory = sp.GetRequiredService<Func<WelcomeViewModel>>();
+            return new InputViewModel(healthInsightsService, navigationService, adviceViewModelFactory, historyViewModelFactory, welcomeViewModelFactory);
+        });
         services.AddTransient<AdviceViewModel>();
         services.AddTransient<Func<AdviceViewModel>>(sp => () => sp.GetRequiredService<AdviceViewModel>());
+        services.AddTransient<HistoryViewModel>();
+        services.AddTransient<Func<HistoryViewModel>>(sp => () => sp.GetRequiredService<HistoryViewModel>());
+        services.AddTransient<HistoryDetailViewModel>();
+        services.AddTransient<Func<HistoryDetailViewModel>>(sp => () => sp.GetRequiredService<HistoryDetailViewModel>());
+        services.AddTransient<Func<InputViewModel>>(sp => () => sp.GetRequiredService<InputViewModel>());
+        services.AddTransient<Func<WelcomeViewModel>>(sp => () => sp.GetRequiredService<WelcomeViewModel>());
+
+        services.AddTransient(sp =>
+        {
+            var navigationService = sp.GetRequiredService<INavigationService>();
+            var inputViewModelFactory = sp.GetRequiredService<Func<InputViewModel>>();
+            var historyViewModelFactory = sp.GetRequiredService<Func<HistoryViewModel>>();
+            var healthTipsViewModelFactory = sp.GetRequiredService<Func<HealthTipsViewModel>>();
+            var healthInsightsService = sp.GetRequiredService<IHealthInsightsService>();
+            return new WelcomeViewModel(navigationService, inputViewModelFactory, historyViewModelFactory, healthTipsViewModelFactory, healthInsightsService);
+        });
+
+        // Health Tips
+        services.AddTransient<HealthTipsViewModel>();
+        services.AddTransient<Func<HealthTipsViewModel>>(sp => () => sp.GetRequiredService<HealthTipsViewModel>());
+        services.AddTransient<TipsViewModel>();
+
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<MainWindow>();
         services.AddTransient<InputView>();
         services.AddTransient<AdviceView>();
+        services.AddTransient<HistoryView>();
+        services.AddTransient<HistoryDetailView>();
+        services.AddTransient<WelcomeView>();
+        services.AddTransient<HealthTipsView>();
+        services.AddTransient<TipsView>();
     }
 
     private void DisableAvaloniaDataAnnotationValidation()
