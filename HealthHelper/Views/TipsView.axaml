@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:HealthHelper.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="200"
+             x:Class="HealthHelper.Views.TipsView"
+             x:DataType="vm:TipsViewModel">
+
+    <Border Padding="16"
+            BorderBrush="#E0E0E0"
+            BorderThickness="1"
+            CornerRadius="8"
+            Background="White">
+
+        <Grid>
+            <!-- 加载状态 -->
+            <TextBlock Text="正在加载健康小贴士..."
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      FontSize="14"
+                      Foreground="#666666"
+                      IsVisible="{Binding IsLoading}"/>
+
+            <!-- 小贴士内容 -->
+            <StackPanel Spacing="12"
+                       IsVisible="{Binding !IsLoading}">
+
+                <!-- 标题 -->
+                <TextBlock Text="💡 健康小贴士"
+                          FontSize="16"
+                          FontWeight="SemiBold"
+                          Foreground="#2E7D32"/>
+
+                <!-- 小贴士内容 -->
+                <TextBlock Text="{Binding CurrentTip.Title}"
+                          FontSize="14"
+                          FontWeight="SemiBold"
+                          TextWrapping="Wrap"
+                          Foreground="#333333"/>
+
+                <TextBlock Text="{Binding CurrentTip.Content}"
+                          FontSize="13"
+                          TextWrapping="Wrap"
+                          LineHeight="20"
+                          Foreground="#555555"
+                          MaxHeight="60"
+                          TextTrimming="CharacterEllipsis"/>
+
+                <!-- 查看更多按钮 -->
+                <Button Content="查看更多小贴士 →"
+                       HorizontalAlignment="Right"
+                       Background="Transparent"
+                       BorderThickness="0"
+                       Foreground="#1976D2"
+                       FontSize="12"
+                       Padding="8,4"
+                       Command="{Binding ViewAllTipsCommand}"
+                       Cursor="Hand">
+                    <Button.Styles>
+                        <Style Selector="Button:pointerover">
+                            <Setter Property="Foreground" Value="#0D47A1"/>
+                        </Style>
+                    </Button.Styles>
+                </Button>
+
+            </StackPanel>
+        </Grid>
+
+    </Border>
+
+</UserControl>

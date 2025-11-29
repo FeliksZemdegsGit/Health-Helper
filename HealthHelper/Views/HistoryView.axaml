@@ -1,0 +1,111 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:HealthHelper.ViewModels"
+             x:Class="HealthHelper.Views.HistoryView"
+             x:DataType="vm:HistoryViewModel">
+
+    <UserControl.Styles>
+        <!-- 基础按钮样式 -->
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button:pointerover">
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+
+        <Style Selector="Button.back-button">
+            <Setter Property="Background" Value="#F5F5F5"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.back-button:pointerover">
+            <Setter Property="Background" Value="#F5F5F5"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.refresh-button">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.refresh-button:pointerover">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.add-data-button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.add-data-button:pointerover">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer Background="#F5F5F5">
+        <StackPanel Margin="24" Spacing="18">
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="历史记录" FontSize="28" FontWeight="SemiBold" Foreground="#2E7D32"/>
+                    <TextBlock Text="{Binding StatusMessage}" Foreground="#666666"/>
+                </StackPanel>
+                <Button Classes="back-button" Grid.Column="1" Content="返回" Command="{Binding GoBackCommand}" HorizontalAlignment="Right"/>
+            </Grid>
+
+            <Border Padding="20" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="10" Background="White">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="最近7天健康记录" FontWeight="SemiBold" Foreground="#2E7D32" FontSize="18"/>
+                    <ProgressBar IsIndeterminate="{Binding IsLoading}" IsVisible="{Binding IsLoading}" Height="4"/>
+                    <ScrollViewer MaxHeight="400" IsVisible="{Binding !IsLoading}" Margin="0,10,0,0"
+                                  ScrollChanged="OnScrollChanged">
+                        <StackPanel x:Name="HistoryItemsPanel" Spacing="12">
+                            <!-- 加载更多指示器 -->
+                            <ProgressBar IsIndeterminate="{Binding IsLoadingMore}"
+                                       IsVisible="{Binding IsLoadingMore}"
+                                       Height="4"
+                                       Margin="0,8,0,8"/>
+                            <TextBlock Text="正在加载更多历史记录..."
+                                     IsVisible="{Binding IsLoadingMore}"
+                                     HorizontalAlignment="Center"
+                                     Foreground="#666666"
+                                     FontSize="12"
+                                     Margin="0,0,0,8"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <StackPanel Spacing="16" IsVisible="{Binding !IsLoading}">
+                        <TextBlock Text="💡 直接点击任意历史记录查看详细数据和AI建议"
+                                   Foreground="#999999"
+                                   FontSize="12"
+                                   TextAlignment="Center"
+                                   IsVisible="{Binding HasHistoryData}"/>
+                        <TextBlock Text="暂无历史记录，请先录入一些健康数据"
+                                   Foreground="#666666"
+                                   FontSize="14"
+                                   TextAlignment="Center"
+                                   IsVisible="{Binding !HasHistoryData}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
+                            <Button Classes="refresh-button" Content="🔄 刷新列表" Command="{Binding LoadDataCommand}"/>
+                            <Button Classes="add-data-button" Content="➕ 录入新数据" Command="{Binding GoBackCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

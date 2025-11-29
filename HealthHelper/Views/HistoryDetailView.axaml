@@ -1,0 +1,141 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:HealthHelper.ViewModels"
+             x:Class="HealthHelper.Views.HistoryDetailView"
+             x:DataType="vm:HistoryDetailViewModel">
+
+    <UserControl.Styles>
+        <!-- 基础按钮样式 -->
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button:pointerover">
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+
+        <Style Selector="Button.back-button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.back-button:pointerover">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.collapse-button">
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.collapse-button:pointerover">
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.view-advice">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.view-advice:pointerover">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer Background="#F5F5F5">
+        <StackPanel Margin="24" Spacing="18">
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="历史记录详情" FontSize="28" FontWeight="SemiBold" Foreground="#2E7D32"/>
+                    <TextBlock Text="{Binding DateDisplay}" Foreground="#666666"/>
+                </StackPanel>
+                <Button Classes="back-button"
+                       Grid.Column="1"
+                       Content="返回"
+                       Command="{Binding GoBackCommand}"
+                       HorizontalAlignment="Right"/>
+            </Grid>
+
+            <Border Padding="16" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Background="White">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="📊 健康数据详情" FontWeight="SemiBold" FontSize="16" Foreground="#2E7D32"/>
+
+                    <!-- 睡眠信息 -->
+                    <Border Padding="12" Background="#F8F9FA" CornerRadius="4" BorderBrush="#E0E0E0" BorderThickness="1">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="😴 睡眠记录" FontWeight="SemiBold" Foreground="#2E7D32"/>
+                            <TextBlock Text="{Binding SleepInfo}" Foreground="#333333"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 饮水信息 -->
+                    <Border Padding="12" Background="#F8F9FA" CornerRadius="4" BorderBrush="#E0E0E0" BorderThickness="1">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="💧 饮水记录" FontWeight="SemiBold" Foreground="#2E7D32"/>
+                            <TextBlock Text="{Binding HydrationInfo}" Foreground="#333333"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 活动信息 -->
+                    <Border Padding="12" Background="#F8F9FA" CornerRadius="4" BorderBrush="#E0E0E0" BorderThickness="1">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="🏃 活动记录" FontWeight="SemiBold" Foreground="#2E7D32"/>
+                            <TextBlock Text="{Binding ActivityInfo}" Foreground="#333333"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- 历史建议区域 -->
+            <Border Padding="16" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Background="White" IsVisible="{Binding ShowAdviceSection}">
+                <StackPanel Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Text="🤖 历史健康建议" FontWeight="SemiBold" FontSize="16" Foreground="#2E7D32" Grid.Column="0"/>
+                        <Button Classes="collapse-button"
+                                Content="收起"
+                                Command="{Binding ToggleAdviceSection}"
+                                Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                FontSize="12"
+                                IsVisible="{Binding ShowAdviceSection}"/>
+                    </Grid>
+                    <ProgressBar IsIndeterminate="{Binding IsLoadingAdvice}"
+                               IsVisible="{Binding IsLoadingAdvice}"
+                               Height="4"/>
+                    <Border Background="#F8F9FA"
+                             Padding="16"
+                             CornerRadius="6"
+                             MinHeight="200"
+                             BorderBrush="#E0E0E0"
+                             BorderThickness="1"
+                             IsVisible="{Binding ShowAdviceText}">
+                        <ScrollViewer>
+                            <TextBlock Text="{Binding HistoricalAdvice}"
+                                       TextWrapping="Wrap"
+                                       Foreground="#333333"
+                                       LineHeight="22"
+                                       FontSize="14"/>
+                        </ScrollViewer>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- 查看建议按钮（默认显示） -->
+            <Button Classes="view-advice"
+                    Content="{Binding AdviceButtonText}"
+                    Command="{Binding GenerateHistoricalAdviceCommand}"
+                    IsEnabled="{Binding CanShowAdvice}"
+                    IsVisible="{Binding !ShowAdviceSection}"
+                    HorizontalAlignment="Center"
+                    Margin="0,16,0,0"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

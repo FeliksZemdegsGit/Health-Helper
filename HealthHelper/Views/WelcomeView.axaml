@@ -1,0 +1,108 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:HealthHelper.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="HealthHelper.Views.WelcomeView"
+             x:DataType="vm:WelcomeViewModel">
+
+    <UserControl.Styles>
+        <!-- 基础按钮样式 -->
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button:pointerover">
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+
+        <Style Selector="Button.start-input">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.start-input:pointerover">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.view-history">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="Button.view-history:pointerover">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Background="#F5F5F5">
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="30">
+
+            <!-- 应用标题 -->
+            <TextBlock Text="健康助手"
+                      FontSize="36"
+                      FontWeight="Bold"
+                      HorizontalAlignment="Center"
+                      Foreground="#2E7D32"/>
+
+            <!-- 欢迎信息 -->
+            <TextBlock Text="欢迎使用健康助手，请选择您要进行的操作"
+                      FontSize="18"
+                      HorizontalAlignment="Center"
+                      Foreground="#666666"
+                      Margin="0,0,0,20"/>
+
+            <!-- 按钮容器 -->
+            <StackPanel Spacing="20"
+                       HorizontalAlignment="Center">
+
+                <!-- 开始录入按钮 -->
+                <Button Classes="start-input"
+                       Content="开始录入"
+                       FontSize="20"
+                       Padding="40,20"
+                       CornerRadius="10"
+                       HorizontalAlignment="Center"
+                       Command="{Binding StartInputCommand}"
+                       ToolTip.Tip="录入今日的健康数据（睡眠、饮水、运动等）"/>
+
+                <!-- 查看历史记录按钮 -->
+                <Button Classes="view-history"
+                       Content="查看历史记录"
+                       FontSize="20"
+                       Padding="40,20"
+                       CornerRadius="10"
+                       HorizontalAlignment="Center"
+                       Command="{Binding ViewHistoryCommand}"
+                       ToolTip.Tip="查看历史健康记录和AI建议"/>
+
+            </StackPanel>
+
+            <!-- 健康小贴士 -->
+            <ContentControl Content="{Binding TipsViewModel}"
+                           Margin="0,20,0,0"
+                           MaxWidth="500"/>
+
+            <!-- 底部提示信息 -->
+            <TextBlock Text="💡 提示：建议每日定时录入健康数据，系统会为您提供个性化的健康建议"
+                      FontSize="14"
+                      HorizontalAlignment="Center"
+                      Foreground="#999999"
+                      TextWrapping="Wrap"
+                      Margin="0,30,0,0"
+                      MaxWidth="400"/>
+
+        </StackPanel>
+    </Grid>
+
+</UserControl>
