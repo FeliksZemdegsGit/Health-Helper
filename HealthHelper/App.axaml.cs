@@ -37,6 +37,7 @@ public partial class App : Application
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
+
             desktop.MainWindow = Services.GetRequiredService<MainWindow>();
         }
 
@@ -83,8 +84,9 @@ public partial class App : Application
             var inputViewModelFactory = sp.GetRequiredService<Func<InputViewModel>>();
             var historyViewModelFactory = sp.GetRequiredService<Func<HistoryViewModel>>();
             var healthTipsViewModelFactory = sp.GetRequiredService<Func<HealthTipsViewModel>>();
+            var trendsViewModelFactory = sp.GetRequiredService<Func<TrendsViewModel>>();
             var healthInsightsService = sp.GetRequiredService<IHealthInsightsService>();
-            return new WelcomeViewModel(navigationService, inputViewModelFactory, historyViewModelFactory, healthTipsViewModelFactory, healthInsightsService);
+            return new WelcomeViewModel(navigationService, inputViewModelFactory, historyViewModelFactory, healthTipsViewModelFactory, trendsViewModelFactory, healthInsightsService);
         });
 
         // Health Tips
@@ -101,6 +103,11 @@ public partial class App : Application
         services.AddTransient<WelcomeView>();
         services.AddTransient<HealthTipsView>();
         services.AddTransient<TipsView>();
+
+        // Trends
+        services.AddTransient<TrendsViewModel>();
+        services.AddTransient<Func<TrendsViewModel>>(sp => () => sp.GetRequiredService<TrendsViewModel>());
+        services.AddTransient<TrendsView>();
     }
 
     private void DisableAvaloniaDataAnnotationValidation()

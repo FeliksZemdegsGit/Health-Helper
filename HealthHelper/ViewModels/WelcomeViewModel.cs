@@ -11,6 +11,7 @@ public partial class WelcomeViewModel : ViewModelBase
     private readonly Func<InputViewModel> _inputViewModelFactory;
     private readonly Func<HistoryViewModel> _historyViewModelFactory;
     private readonly Func<HealthTipsViewModel> _healthTipsViewModelFactory;
+    private readonly Func<TrendsViewModel> _trendsViewModelFactory;
     private readonly IHealthInsightsService _healthInsightsService;
 
     public TipsViewModel TipsViewModel { get; }
@@ -20,12 +21,14 @@ public partial class WelcomeViewModel : ViewModelBase
         Func<InputViewModel> inputViewModelFactory,
         Func<HistoryViewModel> historyViewModelFactory,
         Func<HealthTipsViewModel> healthTipsViewModelFactory,
+        Func<TrendsViewModel> trendsViewModelFactory,
         IHealthInsightsService healthInsightsService)
     {
         _navigationService = navigationService;
         _inputViewModelFactory = inputViewModelFactory;
         _historyViewModelFactory = historyViewModelFactory;
         _healthTipsViewModelFactory = healthTipsViewModelFactory;
+        _trendsViewModelFactory = trendsViewModelFactory;
         _healthInsightsService = healthInsightsService;
 
         TipsViewModel = new TipsViewModel(
@@ -46,5 +49,12 @@ public partial class WelcomeViewModel : ViewModelBase
     {
         var historyViewModel = _historyViewModelFactory();
         _navigationService.Navigate(historyViewModel);
+    }
+
+    [RelayCommand]
+    private void ViewTrends()
+    {
+        var trendsViewModel = _trendsViewModelFactory();
+        _navigationService.Navigate(trendsViewModel);
     }
 }

@@ -86,6 +86,16 @@
                        Command="{Binding ViewHistoryCommand}"
                        ToolTip.Tip="查看历史健康记录和AI建议"/>
 
+                <!-- 近日数据趋势按钮 -->
+                <Button Classes="view-history"
+                       Content="近日数据趋势"
+                       FontSize="20"
+                       Padding="40,20"
+                       CornerRadius="10"
+                       HorizontalAlignment="Center"
+                       Command="{Binding ViewTrendsCommand}"
+                       ToolTip.Tip="查看近日睡眠、饮水、运动、久坐趋势"/>
+
             </StackPanel>
 
             <!-- 健康小贴士 -->

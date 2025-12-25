@@ -1,4 +1,5 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/dotCover/Editor/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\felik\AppData\Local\JetBrains\Rider2025.2\resharper-host\temp\Rider\vAny\CoverageData\_HealthHelper.1878506783\Snapshot\snapshot.utdcvr</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a936a033_002Da152_002D4bcf_002D87da_002D2d47e8743456/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="&amp;lt;HealthHelper.Tests&amp;gt; 中的所有测试" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="E:\Rider\AvaloniaMvvm\Health-Helper\HealthHelper.Tests" Presentation="&amp;lt;HealthHelper.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

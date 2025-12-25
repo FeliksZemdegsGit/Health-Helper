@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:HealthHelper.ViewModels"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="650"
+             x:Class="HealthHelper.Views.TrendsView"
+             x:DataType="vm:TrendsViewModel">
+
+    <Border Background="#F5F5F5" Padding="20">
+        <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <!-- 顶部栏 -->
+        <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,12">
+            <Button Content="← 返回"
+                    Padding="14,8"
+                    Command="{Binding GoBackCommand}" />
+
+            <TextBlock Grid.Column="1"
+                       Text="近7日趋势"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="#2E7D32" />
+
+            <Button Grid.Column="2"
+                    Content="刷新"
+                    Padding="14,8"
+                    Command="{Binding LoadCommand}" />
+        </Grid>
+
+        <!-- 状态 -->
+        <TextBlock Grid.Row="1"
+                   Text="{Binding StatusMessage}"
+                   Foreground="#666"
+                   Margin="0,0,0,12" />
+
+        <!-- 四宫格图表 -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,*" RowDefinitions="*,*" ColumnSpacing="14" RowSpacing="14">
+
+            <!-- 睡眠 -->
+            <Border Background="White" CornerRadius="10" Padding="12">
+                <Grid RowDefinitions="Auto,*">
+                    <TextBlock Text="睡眠时间（小时）" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <lvc:CartesianChart Grid.Row="1"
+                                       Series="{Binding SleepSeries}"
+                                       XAxes="{Binding XAxes}" />
+                </Grid>
+            </Border>
+
+            <!-- 饮水 -->
+            <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="12">
+                <Grid RowDefinitions="Auto,*">
+                    <TextBlock Text="饮水量（ml）" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <lvc:CartesianChart Grid.Row="1"
+                                       Series="{Binding HydrationSeries}"
+                                       XAxes="{Binding XAxes}" />
+                </Grid>
+            </Border>
+
+            <!-- 运动 -->
+            <Border Grid.Row="1" Background="White" CornerRadius="10" Padding="12">
+                <Grid RowDefinitions="Auto,*">
+                    <TextBlock Text="运动时间（分钟）" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <lvc:CartesianChart Grid.Row="1"
+                                       Series="{Binding WorkoutSeries}"
+                                       XAxes="{Binding XAxes}" />
+                </Grid>
+            </Border>
+
+            <!-- 久坐 -->
+            <Border Grid.Row="1" Grid.Column="1" Background="White" CornerRadius="10" Padding="12">
+                <Grid RowDefinitions="Auto,*">
+                    <TextBlock Text="久坐时间（分钟）" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <lvc:CartesianChart Grid.Row="1"
+                                       Series="{Binding SedentarySeries}"
+                                       XAxes="{Binding XAxes}" />
+                </Grid>
+            </Border>
+
+        </Grid>
+
+        <!-- 底部提示 -->
+        <TextBlock Grid.Row="3"
+                   Text="提示：趋势基于本地数据库最近7天记录生成。"
+                   Foreground="#999"
+                   Margin="0,12,0,0" />
+        </Grid>
+    </Border>
+</UserControl>
+
