@@ -60,7 +60,7 @@
         </Style>
     </UserControl.Styles>
 
-    <ScrollViewer Background="#F5F5F5">
+    <ScrollViewer Background="Transparent">
         <StackPanel Margin="24" Spacing="18">
             <TextBlock Text="今日健康数据录入" FontSize="28" FontWeight="SemiBold" Foreground="#2E7D32"/>
             <TextBlock Text="{Binding StatusMessage}" Foreground="#666666" TextWrapping="Wrap"/>

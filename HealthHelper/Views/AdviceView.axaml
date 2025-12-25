@@ -40,7 +40,7 @@
         </Style>
     </UserControl.Styles>
 
-    <ScrollViewer Background="#F5F5F5">
+    <ScrollViewer Background="Transparent">
         <StackPanel Margin="24" Spacing="18">
             <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
                 <StackPanel Grid.Column="0">

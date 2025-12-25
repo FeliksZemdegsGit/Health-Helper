@@ -43,7 +43,7 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid Background="#F5F5F5">
+    <Grid Background="Transparent">
         <StackPanel HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Spacing="30">

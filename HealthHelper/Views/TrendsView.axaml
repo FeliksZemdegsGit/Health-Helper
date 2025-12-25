@@ -8,7 +8,7 @@
              x:Class="HealthHelper.Views.TrendsView"
              x:DataType="vm:TrendsViewModel">
 
-    <Border Background="#F5F5F5" Padding="20">
+    <Border Background="Transparent" Padding="20">
         <Grid RowDefinitions="Auto,Auto,*,Auto">
 
         <!-- 顶部栏 -->

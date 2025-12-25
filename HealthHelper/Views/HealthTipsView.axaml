@@ -36,7 +36,7 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid Background="#F5F5F5">
+    <Grid Background="Transparent">
         <!-- 顶部标题栏 -->
         <Border Background="#2E7D32"
                 Height="60"
@@ -68,7 +68,7 @@
         </Border>
 
         <!-- 主要内容区域 -->
-        <ScrollViewer Margin="0,60,0,0" Background="#F5F5F5">
+        <ScrollViewer Margin="0,60,0,0" Background="Transparent">
             <StackPanel Margin="24" Spacing="20">
 
                 <!-- 筛选按钮 -->
