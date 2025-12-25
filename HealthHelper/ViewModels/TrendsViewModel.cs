@@ -81,10 +81,13 @@ public partial class TrendsViewModel : ViewModelBase
 
             XAxes[0].Labels = labels;
 
-            SleepSeries = BuildLineSeries(sleepHours, "睡眠(小时)");
-            HydrationSeries = BuildLineSeries(hydrationMl, "饮水(ml)");
-            WorkoutSeries = BuildLineSeries(workoutMin, "运动(分钟)");
-            SedentarySeries = BuildLineSeries(sedentaryMin, "久坐(分钟)");
+            // 说明：tooltip 中文“□□□”的根因是 Skia 字体缺字。
+            // 在不做全局设置的前提下，最稳妥的做法是：避免在 tooltip/legend 中输出中文。
+            // 因此 Series.Name 使用英文，标题仍在 UI TextBlock 中用中文显示。
+            SleepSeries = BuildLineSeries(sleepHours, "Sleep (h)");
+            HydrationSeries = BuildLineSeries(hydrationMl, "Water (ml)");
+            WorkoutSeries = BuildLineSeries(workoutMin, "Workout (min)");
+            SedentarySeries = BuildLineSeries(sedentaryMin, "Sedentary (min)");
 
             StatusMessage = $"已加载近 {ordered.Count} 天趋势";
             RaiseChartPropertiesChanged();
@@ -125,4 +128,3 @@ public partial class TrendsViewModel : ViewModelBase
     [RelayCommand]
     private void GoBack() => _navigationService.GoBack();
 }
-
